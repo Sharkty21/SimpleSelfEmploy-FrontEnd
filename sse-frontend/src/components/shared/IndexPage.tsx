@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/DataTable"
+import { DataTable } from "@/components/shared/DataTable"
 
 const IndexPage = ({ columns, data }) => {
     return (

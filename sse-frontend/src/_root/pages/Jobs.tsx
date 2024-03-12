@@ -1,4 +1,4 @@
-import IndexPage from "@/components/IndexPage"
+import IndexPage from "@/components/shared/IndexPage"
 import { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
 

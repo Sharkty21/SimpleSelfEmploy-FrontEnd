@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/DataTable"
+import { DataTable } from "@/components/shared/DataTable"
 import { Button } from "@/components/ui/button"
 import {
   Card,
