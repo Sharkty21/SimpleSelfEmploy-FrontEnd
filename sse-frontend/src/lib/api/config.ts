@@ -4,7 +4,6 @@ import axios, { AxiosResponse } from "axios";
 export const api = axios.create({
   withCredentials: true,
   baseURL: "http://localhost:3000",
-  
 });
 
 // // Response interceptor for API calls

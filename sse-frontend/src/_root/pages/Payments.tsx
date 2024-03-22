@@ -1,11 +1,11 @@
 import IndexPage from "@/components/shared/IndexPage"
 import { useGetPayments } from "@/lib/tanstack-query/queries"
-import { IPayment, jobsDefaultColumns } from "@/types";
+import { IPayment, paymentsDefaultColumns } from "@/types";
 import { Loader2 } from "lucide-react";
 
 const Payments = () => {
-    const { data: jobs, isLoading } = useGetPayments();
-    const jobsIndexData : IPayment[] = jobs != undefined ? jobs : [];
+    const { data: payments, isLoading } = useGetPayments();
+    const paymentsIndexData : IPayment[] = payments != undefined ? payments : [];
     return (
     <div>
       {(isLoading) ? 
@@ -13,7 +13,7 @@ const Payments = () => {
           <Loader2 className="animate-spin"/>
       ) :
       (
-        <IndexPage data={jobsIndexData} columns={jobsDefaultColumns} title="Payments"/>
+        <IndexPage data={paymentsIndexData} columns={paymentsDefaultColumns} title="Payments"/>
       )}
       </div>
     )

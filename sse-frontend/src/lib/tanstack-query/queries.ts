@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { getJobById, getJobs, getPaymentById, getPayments } from "../api/api"
+import { getJobById, getJobs, getPaymentById, getPayments, postJob } from "../api/api"
 import { QUERY_KEYS } from "./queryKeys"
+import { IJob } from "@/types";
 
 export const useGetPayments = (jobId?: string) => {
     return useQuery({
@@ -29,3 +30,9 @@ export const useGetJobById = (jobId: string) => {
         queryFn: () => getJobById(jobId),
     });
 };
+
+export const useSaveJob = () => {
+    return useMutation({
+      mutationFn: (job: IJob) => postJob(job),
+    });
+  };

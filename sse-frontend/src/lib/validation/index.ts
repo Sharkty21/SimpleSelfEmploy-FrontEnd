@@ -4,25 +4,20 @@ import * as z from "zod";
 // JOB
 // ============================================================
 export const JobValidation = z.object({
+  id: z.string(),
   name: z
     .string()
     .min(1, { message: "Name must be at least 1 character long" })
     .max(100, {
       message: "Name must be less than or equal to 100 characters long",
     }),
-  description: z
-    .string()
-    .max(1000, {
-      message: "Description must be less than or equal to 1000 characters long",
-    }),
-  startDate: z
-    .coerce.date(),
-  customerName: z
-    .string()
-    .max(100, {
-      message:
-        "Customer Name must be less than or equal to 100 characters long",
-    }),
+  description: z.string().max(1000, {
+    message: "Description must be less than or equal to 1000 characters long",
+  }),
+  startDate: z.coerce.date(),
+  customerName: z.string().max(100, {
+    message: "Customer Name must be less than or equal to 100 characters long",
+  }),
 });
 
 export const SignUpValidation = z.object({

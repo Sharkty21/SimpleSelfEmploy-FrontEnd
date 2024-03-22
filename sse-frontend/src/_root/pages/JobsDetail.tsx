@@ -35,6 +35,10 @@ const JobsDetail = () => {
   const { data: job, isLoading } = useGetJobById(id ?? "");
   const [editMode, setEditMode] = useState(false);
 
+  const setEditModeToFalse = () => {
+    setEditMode(false);
+  }
+
   return (
     <section className="h-4/5 w-4/5 flex flex-col space-y-20">
       <Card className="flex flex-row">
@@ -56,7 +60,7 @@ const JobsDetail = () => {
             ) :
             (
               <div className="w-2/3">
-                <EditJob job={job} />
+                <EditJob job={job} complete={setEditModeToFalse}/>
               </div>
             )
           ) : (

@@ -14,21 +14,38 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Loader2 } from "lucide-react"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
+import { useSaveJob } from "@/lib/tanstack-query/queries"
+import { error } from "console"
 
-const EditJob = ({ job }: { job: IJob }) => {
+const EditJob = ({ job, complete }: { job: IJob, complete: () => void }) => {
     const { toast } = useToast();
-    const handleSubmit = () => {
-        toast({
-            title: "Save successful",
-          });
+    const { mutateAsync: saveJob, isPending: isSavingJob } = useSaveJob();
+    
+    const handleSubmit = async (job: z.infer<typeof JobValidation>) => {
+        try {
+            console.log(job);
+            const response = await saveJob(job);
+            if (response == undefined) throw Error;
+
+            toast({
+                title: "Save successful",
+              });
+    
+            complete();
+        } catch (e) {
+            toast({
+                title: "Save unsuccessful",
+            });
+        }
     };
 
     const form = useForm<z.infer<typeof JobValidation>>({
         resolver: zodResolver(JobValidation),
         defaultValues: {
+            id: job.id,
             name: job.name,
             description: job.description,
             startDate: job.startDate,
@@ -124,7 +141,7 @@ const EditJob = ({ job }: { job: IJob }) => {
                             </FormItem>
                         )}
                     />
-                    <Button>Save Changes</Button>
+                    {!isSavingJob ? (<Button>Save Changes</Button>) : (<Loader2 className="animate-spin mx-auto" />)}
                 </form>
             </Form>
         </div>
