@@ -25,6 +25,9 @@ export const jobsDefaultColumns: ColumnDef<IJob>[] = [
     {
         accessorKey: "startDate",
         header: "Start Date",
+        cell: ({ row }) => {
+            return new Date(row.original.startDate).toLocaleDateString()
+        }
     },
     {
         accessorKey: "customerName",

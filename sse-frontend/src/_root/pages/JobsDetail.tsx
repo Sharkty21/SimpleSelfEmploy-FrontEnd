@@ -54,7 +54,7 @@ const JobsDetail = () => {
                   <p>Customer: {job.customerName}</p>
                 </CardContent>
                 <CardFooter>
-                  <p>Start Date: {job.startDate.toString()}</p>
+                  <p>Start Date: {(new Date(job.startDate)).toLocaleDateString()}</p>
                 </CardFooter>
               </div>
             ) :

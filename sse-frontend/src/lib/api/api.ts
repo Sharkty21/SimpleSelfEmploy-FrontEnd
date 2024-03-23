@@ -2,12 +2,9 @@ import { IJob, IPayment } from "@/types";
 import { api } from "./config";
 
 // Queries =============================================
-async function getIndex<T>(endpoint: string, filter?: string): Promise<T[]> {
+async function getIndex<T>(endpoint: string, filter?: object): Promise<T[]> {
   try {
-    const params = {
-      filter,
-    };
-    const response = await api.get(endpoint, { params });
+    const response = await api.get(endpoint, { params: filter });
     const indexData: T[] = response.data;
 
     if (!indexData || !Array.isArray(indexData)) throw Error;
@@ -19,15 +16,22 @@ async function getIndex<T>(endpoint: string, filter?: string): Promise<T[]> {
   }
 }
 
-export async function getPayments(jobId?: string): Promise<IPayment[]> {
-  if (jobId != undefined) {
-    return await getIndex<IPayment>("payments", "jobId=" + jobId);
-  }
-  return await getIndex<IPayment>("payments");
+export async function getPayments(
+  page?: number,
+  jobId?: string
+): Promise<IPayment[]> {
+  const filter = {
+    page: page?.toString() ?? "1",
+    jobId: jobId ?? "",
+  };
+  return await getIndex<IPayment>("payments", filter);
 }
 
-export async function getJobs(): Promise<IJob[]> {
-  return await getIndex<IJob>("jobs");
+export async function getJobs(page?: number): Promise<IJob[]> {
+  const filter = {
+    page: page?.toString() ?? "1",
+  };
+  return await getIndex<IJob>("jobs", filter);
 }
 
 async function getById<T>(
@@ -58,18 +62,26 @@ export async function getPaymentById(
 }
 
 // POST =============================================
-export async function postRecord<T>(endpoint: string, record: T): Promise<T | undefined> {
+export async function saveRecord<T>(
+  endpoint: string,
+  record: T
+): Promise<T | undefined> {
   try {
-    const params = {
-      record,
-    };
-    const recordResponse: T = await api.post(endpoint, params);
+    const recordId = (record as any).id;
+    if (recordId != undefined) {
+      const recordResponse: T = await api.put(
+        endpoint + "/" + recordId,
+        record
+      );
+      return recordResponse;
+    }
+    const recordResponse: T = await api.post(endpoint, record);
     return recordResponse;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function postJob<IJob>(job: IJob) : Promise<IJob | undefined> {
-  return await postRecord<IJob>("jobs", job);
+export async function saveJob<IJob>(job: IJob): Promise<IJob | undefined> {
+  return await saveRecord<IJob>("jobs", job);
 }
