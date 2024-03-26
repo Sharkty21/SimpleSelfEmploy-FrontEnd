@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useGetJobById } from "@/lib/tanstack-query/queries"
+import { useGetJobById, useGetPayments } from "@/lib/tanstack-query/queries"
 import { IPayment, paymentsDefaultColumns } from "@/types"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
@@ -46,7 +46,8 @@ const chartData = await getChartData()
 
 const JobsDetail = () => {
   const { id } = useParams();
-  const { data: job, isLoading } = useGetJobById(id ?? "");
+  const { data: job, isLoading: isGettingJob } = useGetJobById(id ?? "");
+  const { data: payments, isLoading: isGettingPayments } = useGetPayments(undefined, id);
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
 
@@ -71,7 +72,7 @@ const JobsDetail = () => {
   };
 
   return (
-    <section className="h-4/5 w-4/5 flex flex-col space-y-20">
+    <section className="w-4/5 my-10 flex flex-col space-y-20">
       <Card className="flex flex-col">
         <div className="flex justify-end">
           {editMode && (
@@ -95,7 +96,7 @@ const JobsDetail = () => {
           )}
           <Button className="mx-5 mt-5" onClick={() => setEditMode(!editMode)}>{!editMode ? (<p>Edit</p>) : (<p>Cancel</p>)}</Button>
         </div>
-        {(job != undefined && !isLoading) ?
+        {(job != undefined && !isGettingJob) ?
           ((!editMode) ?
             (
               <div>
@@ -123,10 +124,14 @@ const JobsDetail = () => {
           )
         }
       </Card>
-      <div>
-        <h3 className="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold">Financials</h3>
-        <DataTable columns={paymentsDefaultColumns} data={chartData} />
-      </div>
+      {(!isGettingPayments) ? (
+        <div className="">
+          <h3 className="scroll-m-20 border-b pb-2 text-2xl font-semibold">Financials</h3>
+          <DataTable columns={paymentsDefaultColumns} data={payments ?? []} />
+        </div>
+      ) : (
+        <Loader2 className="animate-spin" />
+      )}
     </section>
   )
 }

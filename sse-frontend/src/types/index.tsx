@@ -15,7 +15,7 @@ export const jobsDefaultColumns: ColumnDef<IJob>[] = [
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => {
-            return <Link to={`${row.original.id}`} className="font-medium text-primary underline underline-offset-4">{row.original.name}</Link>
+            return <Link to={`/jobs/${row.original.id}`} className="font-medium text-primary underline underline-offset-4">{row.original.name}</Link>
         }
     },
     {
@@ -48,7 +48,7 @@ export const paymentsDefaultColumns: ColumnDef<IPayment>[] = [
         accessorKey: "memo",
         header: "Memo",
         cell: ({ row }) => {
-            return <Link to={`${row.original.id}`} className="font-medium text-primary underline underline-offset-4">{row.original.memo}</Link>
+            return <Link to={`/payments/${row.original.id}`} className="font-medium text-primary underline underline-offset-4">{row.original.memo}</Link>
         }
     },
     {
