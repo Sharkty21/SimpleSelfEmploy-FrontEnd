@@ -1,7 +1,7 @@
 import { IJob, IPayment } from "@/types";
 import { api } from "./config";
 
-// Queries =============================================
+// QUERIES =============================================
 async function getIndex<T>(endpoint: string, filter?: object): Promise<T[]> {
   try {
     const response = await api.get(endpoint, { params: filter });
@@ -84,4 +84,21 @@ export async function saveRecord<T>(
 
 export async function saveJob<IJob>(job: IJob): Promise<IJob | undefined> {
   return await saveRecord<IJob>("jobs", job);
+}
+
+// DELETE =============================================
+export async function deleteRecord(
+  endpoint: string,
+  id: string
+): Promise<void> {
+  try {
+    const response = await api.delete(endpoint + "/" + id);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteJob(id: string): Promise<void> {
+  await deleteRecord("jobs", id);
 }
