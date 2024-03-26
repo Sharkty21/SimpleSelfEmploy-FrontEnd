@@ -18,7 +18,6 @@ import { CalendarIcon, Loader2 } from "lucide-react"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import { useSaveJob } from "@/lib/tanstack-query/queries"
-import { error } from "console"
 
 const EditJob = ({ job, complete }: { job: IJob, complete: () => void }) => {
     const { toast } = useToast();

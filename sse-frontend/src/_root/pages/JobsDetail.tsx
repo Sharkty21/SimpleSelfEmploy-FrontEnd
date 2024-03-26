@@ -13,7 +13,21 @@ import { useGetJobById } from "@/lib/tanstack-query/queries"
 import { IPayment, paymentsDefaultColumns } from "@/types"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { toast } from "@/components/ui/use-toast"
+import { deleteJob } from "@/lib/api/api"
+
 
 async function getChartData(): Promise<IPayment[]> {
   // Fetch data from your API here.
@@ -34,18 +48,57 @@ const JobsDetail = () => {
   const { id } = useParams();
   const { data: job, isLoading } = useGetJobById(id ?? "");
   const [editMode, setEditMode] = useState(false);
+  const navigate = useNavigate();
 
   const setEditModeToFalse = () => {
     setEditMode(false);
   }
 
+  const handleDelete = async () => {
+    try {
+      await deleteJob(id ?? "");
+
+      toast({
+        title: "Delete successful",
+      });
+
+      navigate("/jobs");
+    } catch (e) {
+      toast({
+        title: "Delete unsuccessful",
+      });
+    }
+  };
+
   return (
     <section className="h-4/5 w-4/5 flex flex-col space-y-20">
-      <Card className="flex flex-row">
+      <Card className="flex flex-col">
+        <div className="flex justify-end">
+          {editMode && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="mt-5">Delete</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete {job?.name}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>Delete {job?.name}</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+          <Button className="mx-5 mt-5" onClick={() => setEditMode(!editMode)}>{!editMode ? (<p>Edit</p>) : (<p>Cancel</p>)}</Button>
+        </div>
         {(job != undefined && !isLoading) ?
           ((!editMode) ?
             (
-              <div className="w-2/3">
+              <div>
                 <CardHeader>
                   <CardTitle>{job.name} - <span className="text-muted-foreground italic">{job.id}</span></CardTitle>
                   <CardDescription>{job.description}</CardDescription>
@@ -60,7 +113,7 @@ const JobsDetail = () => {
             ) :
             (
               <div className="w-2/3">
-                <EditJob job={job} complete={setEditModeToFalse}/>
+                <EditJob job={job} complete={setEditModeToFalse} />
               </div>
             )
           ) : (
@@ -69,9 +122,6 @@ const JobsDetail = () => {
             </div>
           )
         }
-        <div className="w-1/3 flex justify-end">
-          <Button className="m-5" onClick={() => setEditMode(!editMode)}>{ !editMode ? (<p>Edit</p>) : (<p>Cancel</p>)}</Button>
-        </div>
       </Card>
       <div>
         <h3 className="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold">Financials</h3>
