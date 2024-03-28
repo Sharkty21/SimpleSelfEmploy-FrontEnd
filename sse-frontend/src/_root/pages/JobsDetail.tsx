@@ -13,7 +13,7 @@ import { useGetJobById, useGetPayments } from "@/lib/tanstack-query/queries"
 import { paymentsDefaultColumns } from "@/types"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -109,8 +109,15 @@ const JobsDetail = () => {
         }
       </Card>
       {(!isGettingPayments) ? (
-        <div className="">
-          <h3 className="scroll-m-20 border-b pb-2 text-2xl font-semibold">Financials</h3>
+        <div>
+          <div className="mb-3 flex flex-row justify-between">
+            <h3 className="scroll-m-20 pb-2 text-2xl font-semibold">Payments</h3>
+            <Link to={`/payments/new?jobId=${job?.id}`}>
+              <Button>
+                New Payment
+              </Button>
+            </Link>
+          </div>
           <DataTable columns={paymentsDefaultColumns} data={payments ?? []} />
         </div>
       ) : (

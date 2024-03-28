@@ -34,6 +34,11 @@ const Navbar = () => {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
+                        <Link to="/Payments" className={navigationMenuTriggerStyle()}>
+                            Payments
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
                         <Link to="/Admin" className={navigationMenuTriggerStyle()}>
                             Admin
                         </Link>

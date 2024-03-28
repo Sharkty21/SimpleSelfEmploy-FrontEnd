@@ -15,15 +15,17 @@ import {
 } from "@/components/ui/popover"
 import { format } from "date-fns"
 import { CalendarIcon, Loader2 } from "lucide-react"
-import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import { useSavePayment } from "@/lib/tanstack-query/queries"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
-const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, complete: (() => void) | undefined }) => {
+const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, complete: (() => void) | undefined}) => {
     const { toast } = useToast();
     const { mutateAsync: savePayment, isPending: isSavingPayment } = useSavePayment();
     const navigate = useNavigate();
+
+    const [searchParams] = useSearchParams();
+    const jobId = searchParams.get('jobId');
 
     const handleSubmit = async (payment: z.infer<typeof PaymentValidation>) => {
         try {
@@ -36,7 +38,7 @@ const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, com
             });
 
             if (complete == undefined) {
-                navigate("/payments/" + response.id)
+                navigate("/jobs/" + payment.jobId)
             }
             else {
                 complete();
@@ -51,10 +53,11 @@ const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, com
     const form = useForm<z.infer<typeof PaymentValidation>>({
         resolver: zodResolver(PaymentValidation),
         defaultValues: {
-            id: payment?.id,
-            memo: payment?.memo,
-            amount: payment?.amount,
-            date: payment?.date,
+            id: payment?.id ?? "",
+            jobId: payment?.jobId ?? jobId ?? "",
+            memo: payment?.memo ?? "",
+            amount: payment?.amount ?? 0,
+            date: payment?.date ?? new Date(),
         },
     });
 
@@ -66,6 +69,19 @@ const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, com
                 <form
                     onSubmit={form.handleSubmit(handleSubmit)}
                     className="flex flex-col gap-9 m-auto pb-10 w-full">
+                    <FormField
+                        control={form.control}
+                        name="jobId"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Job Id</FormLabel>
+                                <FormControl>
+                                    <Input type="text" className="shad-input" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <FormField
                         control={form.control}
                         name="memo"

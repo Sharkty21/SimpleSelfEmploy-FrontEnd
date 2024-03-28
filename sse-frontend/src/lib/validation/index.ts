@@ -22,6 +22,7 @@ export const JobValidation = z.object({
 
 export const PaymentValidation = z.object({
   id: z.string(),
+  jobId: z.string(),
   memo: z
     .string()
     .min(1, { message: "Memo must be at least 1 character long" })

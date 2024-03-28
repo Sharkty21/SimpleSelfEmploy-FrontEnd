@@ -38,6 +38,7 @@ export const jobsDefaultColumns: ColumnDef<IJob>[] = [
 // PAYMENTS
 export type IPayment = {
     id: string,
+    jobId: string,
     memo: string,
     amount: number,
     date: Date
