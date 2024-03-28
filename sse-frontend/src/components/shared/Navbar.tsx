@@ -29,18 +29,18 @@ const Navbar = () => {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link to="/Jobs" className={navigationMenuTriggerStyle()}>
+                        <Link to="/jobs" className={navigationMenuTriggerStyle()}>
                             Jobs
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link to="/Payments" className={navigationMenuTriggerStyle()}>
+                        <Link to="/payments" className={navigationMenuTriggerStyle()}>
                             Payments
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link to="/Admin" className={navigationMenuTriggerStyle()}>
-                            Admin
+                        <Link to="/account" className={navigationMenuTriggerStyle()}>
+                            Account
                         </Link>
                     </NavigationMenuItem>
                 </NavigationMenuList>
