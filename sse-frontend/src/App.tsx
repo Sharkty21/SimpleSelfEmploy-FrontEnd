@@ -7,6 +7,9 @@ import SignInForm from "./_auth/forms/SignInForm";
 import { Toaster } from "./components/ui/toaster";
 import Jobs from "./_root/pages/Jobs";
 import JobsDetail from "./_root/pages/JobsDetail";
+import Payments from "./_root/pages/Payments";
+import PaymentsDetail from "./_root/pages/PaymentsDetail";
+import New from "./_root/pages/New";
 
 const App = () => {
     return (
@@ -22,6 +25,10 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="jobs" element={<Jobs />} />
             <Route path="jobs/:id" element={<JobsDetail />} />
+            <Route path="jobs/new" element={<New type="job"/>} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="payments/:id" element={<PaymentsDetail />} />
+            <Route path="payments/new" element={<New type="payment"/>} />
           </Route>
         </Routes>
 

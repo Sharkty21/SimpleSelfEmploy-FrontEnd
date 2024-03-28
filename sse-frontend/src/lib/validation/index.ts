@@ -20,6 +20,18 @@ export const JobValidation = z.object({
   }),
 });
 
+export const PaymentValidation = z.object({
+  id: z.string(),
+  memo: z
+    .string()
+    .min(1, { message: "Memo must be at least 1 character long" })
+    .max(100, {
+      message: "Memo must be less than or equal to 100 characters long",
+    }),
+  amount: z.coerce.number(),
+  date: z.coerce.date(),
+});
+
 export const SignUpValidation = z.object({
   username: z
     .string()

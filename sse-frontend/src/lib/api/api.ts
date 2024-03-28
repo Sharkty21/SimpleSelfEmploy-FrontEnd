@@ -86,6 +86,10 @@ export async function saveJob<IJob>(job: IJob): Promise<IJob | undefined> {
   return await saveRecord<IJob>("jobs", job);
 }
 
+export async function savePayment<IPayment>(payment: IPayment): Promise<IPayment | undefined> {
+  return await saveRecord<IPayment>("payments", payment);
+}
+
 // DELETE =============================================
 export async function deleteRecord(
   endpoint: string,
@@ -101,4 +105,8 @@ export async function deleteRecord(
 
 export async function deleteJob(id: string): Promise<void> {
   await deleteRecord("jobs", id);
+}
+
+export async function deletePayment(id: string): Promise<void> {
+  await deleteRecord("payments", id);
 }

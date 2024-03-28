@@ -9,6 +9,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import { Link, useLocation, useParams } from "react-router-dom";
+import { Button } from "../ui/button";
 
 const IndexPage = ({
     columns,
@@ -23,7 +24,14 @@ const IndexPage = ({
 }) => {
     return (
         <div>
-            <h3 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold">{title}</h3>
+            <div className="mb-3 flex flex-row justify-between">
+                <h3 className="scroll-m-20 pb-2 text-2xl font-semibold">{title}</h3>
+                <Link to="new">
+                    <Button>
+                        New
+                    </Button>
+                </Link>
+            </div>
             <DataTable columns={columns} data={data} />
             <Pagination className="pt-4">
                 <PaginationContent>

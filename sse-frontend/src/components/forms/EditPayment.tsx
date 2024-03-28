@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
-import { IJob } from "@/types"
-import { JobValidation } from "@/lib/validation"
+import { IPayment } from "@/types"
+import { PaymentValidation } from "@/lib/validation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "../ui/button"
@@ -17,18 +17,18 @@ import { format } from "date-fns"
 import { CalendarIcon, Loader2 } from "lucide-react"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
-import { useSaveJob } from "@/lib/tanstack-query/queries"
+import { useSavePayment } from "@/lib/tanstack-query/queries"
 import { useNavigate } from "react-router-dom"
 
-const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => void) | undefined }) => {
+const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, complete: (() => void) | undefined }) => {
     const { toast } = useToast();
-    const { mutateAsync: saveJob, isPending: isSavingJob } = useSaveJob();
+    const { mutateAsync: savePayment, isPending: isSavingPayment } = useSavePayment();
     const navigate = useNavigate();
 
-    const handleSubmit = async (job: z.infer<typeof JobValidation>) => {
+    const handleSubmit = async (payment: z.infer<typeof PaymentValidation>) => {
         try {
-            console.log(job);
-            const response = await saveJob(job);
+            console.log(payment);
+            const response = await savePayment(payment);
             if (response == undefined) throw Error;
 
             toast({
@@ -36,7 +36,7 @@ const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => vo
             });
 
             if (complete == undefined) {
-                navigate("/jobs/" + response.id)
+                navigate("/payments/" + response.id)
             }
             else {
                 complete();
@@ -48,20 +48,19 @@ const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => vo
         }
     };
 
-    const form = useForm<z.infer<typeof JobValidation>>({
-        resolver: zodResolver(JobValidation),
+    const form = useForm<z.infer<typeof PaymentValidation>>({
+        resolver: zodResolver(PaymentValidation),
         defaultValues: {
-            id: job?.id ?? "",
-            name: job?.name ?? "",
-            description: job?.description ?? "",
-            startDate: job?.startDate ?? new Date(),
-            customerName: job?.customerName ?? "",
+            id: payment?.id,
+            memo: payment?.memo,
+            amount: payment?.amount,
+            date: payment?.date,
         },
     });
 
     return (
         <div className="flex flex-col w-2/3 m-auto">
-            <h3 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold">{(job == undefined) ? (<p>New Job</p>) : (<p>Edit Job</p>)}</h3>
+            <h3 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold">{(payment == undefined) ? (<p>New Payment</p>) : (<p>Edit Payment</p>)}</h3>
             <hr className="h-px mb-5 bg-gray-200 border-0 dark:bg-gray-700"></hr>
             <Form {...form}>
                 <form
@@ -69,10 +68,10 @@ const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => vo
                     className="flex flex-col gap-9 m-auto pb-10 w-full">
                     <FormField
                         control={form.control}
-                        name="name"
+                        name="memo"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Name</FormLabel>
+                                <FormLabel>Memo</FormLabel>
                                 <FormControl>
                                     <Input type="text" className="shad-input" {...field} />
                                 </FormControl>
@@ -82,10 +81,23 @@ const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => vo
                     />
                     <FormField
                         control={form.control}
-                        name="startDate"
+                        name="amount"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Amount ($)</FormLabel>
+                                <FormControl>
+                                    <Input type="number" className="shad-input" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="date"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Start Date</FormLabel>
+                                <FormLabel>Date</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -118,40 +130,11 @@ const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => vo
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="customerName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Customer Name</FormLabel>
-                                <FormControl>
-                                    <Input type="text" className="shad-input" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Description</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        className="resize-none"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {!isSavingJob ? (<Button>Save Changes</Button>) : (<Loader2 className="animate-spin mx-auto" />)}
+                    {!isSavingPayment ? (<Button>Save Changes</Button>) : (<Loader2 className="animate-spin mx-auto" />)}
                 </form>
             </Form>
         </div>
     )
 }
 
-export default EditJob
+export default EditPayment

@@ -1,5 +1,3 @@
-import EditJob from "@/components/forms/EditJob"
-import { DataTable } from "@/components/shared/DataTable"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -9,8 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useGetJobById, useGetPayments } from "@/lib/tanstack-query/queries"
-import { paymentsDefaultColumns } from "@/types"
+import { useGetPaymentById } from "@/lib/tanstack-query/queries"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
@@ -26,12 +23,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { toast } from "@/components/ui/use-toast"
-import { deleteJob } from "@/lib/api/api"
+import { deletePayment } from "@/lib/api/api"
+import EditPayment from "@/components/forms/EditPayment"
 
-const JobsDetail = () => {
+
+const PaymentsDetail = () => {
   const { id } = useParams();
-  const { data: job, isLoading: isGettingJob } = useGetJobById(id ?? "");
-  const { data: payments, isLoading: isGettingPayments } = useGetPayments(undefined, id);
+  const { data: payment, isLoading: isGettingPayment } = useGetPaymentById(id ?? "");
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
 
@@ -41,13 +39,13 @@ const JobsDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteJob(id ?? "");
+      await deletePayment(id ?? "");
 
       toast({
         title: "Delete successful",
       });
 
-      navigate("/jobs");
+      navigate("/payments");
     } catch (e) {
       toast({
         title: "Delete unsuccessful",
@@ -68,37 +66,37 @@ const JobsDetail = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete {job?.name}.
+                    This action cannot be undone. This will permanently delete {payment?.memo}.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete}>Delete {job?.name}</AlertDialogAction>
+                  <AlertDialogAction onClick={handleDelete}>Delete {}</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           )}
           <Button className="mx-5 mt-5" onClick={() => setEditMode(!editMode)}>{!editMode ? (<p>Edit</p>) : (<p>Cancel</p>)}</Button>
         </div>
-        {(job != undefined && !isGettingJob) ?
+        {(payment != undefined && !isGettingPayment) ?
           ((!editMode) ?
             (
               <div>
                 <CardHeader>
-                  <CardTitle>{job.name} - <span className="text-muted-foreground italic">{job.id}</span></CardTitle>
-                  <CardDescription>{job.description}</CardDescription>
+                  <CardTitle>{payment.memo}</CardTitle>
+                  <CardDescription>{}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p>Customer: {job.customerName}</p>
+                  <p>Amount: ${Number(payment.amount).toFixed(2)}</p>
                 </CardContent>
                 <CardFooter>
-                  <p>Start Date: {(new Date(job.startDate)).toLocaleDateString()}</p>
+                  <p>Date: {(new Date(payment.date)).toLocaleDateString()}</p>
                 </CardFooter>
               </div>
             ) :
             (
               <div className="w-2/3">
-                <EditJob job={job} complete={setEditModeToFalse} />
+                <EditPayment payment={payment} complete={setEditModeToFalse} />
               </div>
             )
           ) : (
@@ -108,16 +106,8 @@ const JobsDetail = () => {
           )
         }
       </Card>
-      {(!isGettingPayments) ? (
-        <div className="">
-          <h3 className="scroll-m-20 border-b pb-2 text-2xl font-semibold">Financials</h3>
-          <DataTable columns={paymentsDefaultColumns} data={payments ?? []} />
-        </div>
-      ) : (
-        <Loader2 className="animate-spin" />
-      )}
     </section>
   )
 }
 
-export default JobsDetail
+export default PaymentsDetail

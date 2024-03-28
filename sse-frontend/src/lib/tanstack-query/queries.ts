@@ -1,19 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteJob,
+  deletePayment,
   getJobById,
   getJobs,
   getPaymentById,
   getPayments,
   saveJob,
+  savePayment,
 } from "../api/api";
 import { QUERY_KEYS } from "./queryKeys";
-import { IJob } from "@/types";
+import { IJob, IPayment } from "@/types";
 
-export const useGetPayments = (page?: number, jobId?: string) => {
+// PAYMENTS
+export const useGetPayments = (page?: number, paymentId?: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_PAYMENTS, page, jobId],
-    queryFn: () => getPayments(page, jobId),
+    queryKey: [QUERY_KEYS.GET_PAYMENTS, page, paymentId],
+    queryFn: () => getPayments(page, paymentId),
   });
 };
 
@@ -24,6 +27,37 @@ export const useGetPaymentById = (paymentId: string) => {
   });
 };
 
+export const useSavePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payment: IPayment) => savePayment(payment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_PAYMENT_BY_ID],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_PAYMENTS],
+      });
+    },
+  });
+};
+
+export const useDeletePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deletePayment(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_PAYMENT_BY_ID],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_PAYMENTS],
+      });
+    },
+  });
+};
+
+// JOBS
 export const useGetJobs = (page?: number) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_JOBS, page],
@@ -31,17 +65,17 @@ export const useGetJobs = (page?: number) => {
   });
 };
 
-export const useGetJobById = (jobId: string) => {
+export const useGetJobById = (paymentId: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_JOB_BY_ID, jobId],
-    queryFn: () => getJobById(jobId),
+    queryKey: [QUERY_KEYS.GET_JOB_BY_ID, paymentId],
+    queryFn: () => getJobById(paymentId),
   });
 };
 
 export const useSaveJob = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (job: IJob) => saveJob(job),
+    mutationFn: (payment: IJob) => saveJob(payment),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_JOB_BY_ID],
