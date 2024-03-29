@@ -2,13 +2,11 @@ import { DataTable } from "@/components/shared/DataTable"
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
-    PaginationLink,
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 
 const IndexPage = ({

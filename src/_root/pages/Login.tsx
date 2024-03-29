@@ -1,19 +1,10 @@
-import React from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
-    const { user, loginWithRedirect, isAuthenticated } = useAuth0();
+    const { loginWithRedirect, isAuthenticated } = useAuth0();
     const navigate = useNavigate();
 
     if (isAuthenticated)
