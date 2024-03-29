@@ -101,7 +101,7 @@ const PaymentsDetail = () => {
             )
           ) : (
             <div className="w-2/3 flex justify-center items-center">
-              <Loader2 className="animate-spin" />
+              <Loader2 className="animate-spin my-5" />
             </div>
           )
         }
