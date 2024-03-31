@@ -8,7 +8,6 @@ import JobsDetail from "./_root/pages/JobsDetail";
 import Payments from "./_root/pages/Payments";
 import PaymentsDetail from "./_root/pages/PaymentsDetail";
 import New from "./_root/pages/New";
-import { AuthenticationGuard } from "./components/shared/AuthenticationGuard";
 import Account from "./_root/pages/Account";
 import Login from "./_root/pages/Login";
 import AuthLayout from "./_root/AuthLayout";
@@ -24,10 +23,10 @@ const App = () => {
         </Route>
 
         {/* private routes */}
-        <Route element={<AuthenticationGuard component={RootLayout} />}>
-          <Route index element={<Home/>} />
-          <Route path="jobs" element={<Jobs />} />
-          <Route path="jobs/:id" element={<JobsDetail />} />
+        <Route element={<RootLayout/>}>
+          <Route index element={<Home />}/>
+          <Route path="jobs" element={<Jobs />}/>
+          <Route path="jobs/:id" element={<JobsDetail />}/>
           <Route path="jobs/new" element={<New type="job" />} />
           <Route path="payments" element={<Payments />} />
           <Route path="payments/:id" element={<PaymentsDetail />} />
