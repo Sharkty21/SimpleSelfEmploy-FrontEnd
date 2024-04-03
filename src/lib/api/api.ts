@@ -67,8 +67,8 @@ export async function saveRecord<T>(
   record: T
 ): Promise<T | undefined> {
   try {
-    const recordId = (record as any).id;
-    if (recordId != undefined) {
+    const recordId : string = (record as any).id;
+    if (recordId != undefined && recordId.length > 0) {
       const recordResponse: T = await api.put(
         endpoint + "/" + recordId,
         record
