@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const RootLayout = () => {
-  const { isAuthenticated, getAccessTokenSilently, isLoading, user } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, isLoading } = useAuth0();
 
   // Function to update the authToken in local storage
   const updateAuthToken = async () => {

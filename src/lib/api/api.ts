@@ -96,7 +96,7 @@ export async function deleteRecord(
   id: string
 ): Promise<void> {
   try {
-    const response = await api.delete(endpoint + "/" + id);
+    await api.delete(endpoint + "/" + id);
   } catch (error) {
     console.log(error);
   }
