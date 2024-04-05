@@ -23,9 +23,12 @@ const Account = () => {
         <div className="w-full">
             <Card className="flex flex-col">
                 <div className="flex flex-row justify-between">
+                    <div>
+                    <img className="mx-5 mt-5 rounded-full w-20 h-20" src={user?.picture}></img>
                     <CardHeader>
                         <CardTitle>Account</CardTitle>
                     </CardHeader>
+                    </div>
                     <Button className="mt-5 mx-5 ml-auto" onClick={handleLogout}>Logout</Button>
                 </div>
                 <CardContent>

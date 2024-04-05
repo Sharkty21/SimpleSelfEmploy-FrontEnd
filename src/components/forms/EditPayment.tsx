@@ -29,7 +29,6 @@ const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, com
 
     const handleSubmit = async (payment: z.infer<typeof PaymentValidation>) => {
         try {
-            console.log(payment);
             const response = await savePayment(payment);
             if (response == undefined) throw Error;
 
@@ -38,7 +37,7 @@ const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, com
             });
 
             if (complete == undefined) {
-                navigate("/jobs/" + payment.jobId)
+                navigate("/jobs/" + response.id)
             }
             else {
                 complete();

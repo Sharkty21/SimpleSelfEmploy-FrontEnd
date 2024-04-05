@@ -27,7 +27,6 @@ const EditJob = ({ job, complete }: { job: IJob | undefined, complete: (() => vo
 
     const handleSubmit = async (job: z.infer<typeof JobValidation>) => {
         try {
-            console.log(job);
             const response = await saveJob(job);
             if (response == undefined) throw Error;
 

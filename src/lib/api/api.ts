@@ -69,14 +69,14 @@ export async function saveRecord<T>(
   try {
     const recordId : string = (record as any).id;
     if (recordId != undefined && recordId.length > 0) {
-      const recordResponse: T = await api.put(
+      const recordResponse = await api.put(
         endpoint + "/" + recordId,
         record
       );
-      return recordResponse;
+      return recordResponse.data;
     }
-    const recordResponse: T = await api.post(endpoint, record);
-    return recordResponse;
+    const recordResponse = await api.post(endpoint, record);
+    return recordResponse.data;
   } catch (error) {
     console.log(error);
   }
@@ -97,7 +97,6 @@ export async function deleteRecord(
 ): Promise<void> {
   try {
     const response = await api.delete(endpoint + "/" + id);
-    console.log(response);
   } catch (error) {
     console.log(error);
   }
