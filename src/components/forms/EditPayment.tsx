@@ -37,7 +37,7 @@ const EditPayment = ({ payment, complete }: { payment: IPayment | undefined, com
             });
 
             if (complete == undefined) {
-                navigate("/jobs/" + response.id)
+                navigate("/jobs/" + response.jobId)
             }
             else {
                 complete();
