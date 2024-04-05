@@ -20,8 +20,6 @@ const App = () => {
 
   const { isLoading } = useAuth0();
 
-  console.log(import.meta.env.VITE_AUTH0_CLIENTID);
-
   if (isLoading) {
     return (
       <div className="flex h-screen justify-center items-center m-auto">
